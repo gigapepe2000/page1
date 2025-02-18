@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Ing.Giuseppe">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lanzador de Dados</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .dice-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .dice {
+            width: 100px;
+            height: 100px;
+            background-color: #fff;
+            border: 2px solid #333;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            animation: roll 1s ease-out;
+            position: relative;
+        }
+        @keyframes roll {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .dot {
+            width: 20px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 50%;
+            position: absolute;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        select {
+            padding: 8px;
+            font-size: 1rem;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lanzador de Dados</h1>
+        <label for="numDice">Selecciona el número de dados (1-3): </label>
+        <select id="numDice">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </select>
+
+        <div class="dice-container" id="diceContainer"></div>
+
+        <button onclick="lanzarDados()">Lanzar Dados</button>
+    </div>
+
+    <script>
+        // Función para crear los puntos del dado según el número
+        function crearPuntos(dice, numero) {
+            dice.innerHTML = ''; // Limpiar el contenido del dado
+            const positions = {
+                1: [[50, 50]],
+                2: [[20, 20], [80, 80]],
+                3: [[20, 20], [50, 50], [80, 80]],
+                4: [[20, 20], [20, 80], [80, 20], [80, 80]],
+                5: [[20, 20], [20, 80], [50, 50], [80, 20], [80, 80]],
+                6: [[20, 20], [20, 50], [20, 80], [80, 20], [80, 50], [80, 80]]
+            };
+
+            positions[numero].forEach(pos => {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                dot.style.left = `${pos[0]}%`;
+                dot.style.top = `${pos[1]}%`;
+                dot.style.transform = 'translate(-50%, -50%)';
+                dice.appendChild(dot);
+            });
+        }
+
+        function lanzarDados() {
+            const numDice = parseInt(document.getElementById('numDice').value);
+            const diceContainer = document.getElementById('diceContainer');
+            diceContainer.innerHTML = ''; // Limpiar dados anteriores
+
+            for (let i = 0; i < numDice; i++) {
+                const dice = document.createElement('div');
+                dice.classList.add('dice');
+                dice.textContent = '...';
+                diceContainer.appendChild(dice);
+            }
+
+            // Simular animación y resultado
+            setTimeout(() => {
+                const dados = document.querySelectorAll('.dice');
+                dados.forEach(dice => {
+                    const resultado = Math.floor(Math.random() * 6) + 1;
+                    crearPuntos(dice, resultado);
+                });
+            }, 1000); // Duración de la animación
+        }
+    </script>
+        <a href="mailto:gigapepe2000@nauta.cu">Ing Giuseppe</a>
+</body>
+</html>
